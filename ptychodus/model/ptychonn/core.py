@@ -188,8 +188,6 @@ class PtychoNNReconstructorLibrary(ReconstructorLibrary):
                        isDeveloperModeEnabled: bool) -> PtychoNNReconstructorLibrary:
         modelSettings = PtychoNNModelSettings.createInstance(settingsRegistry)
         trainingSettings = PtychoNNTrainingSettings.createInstance(settingsRegistry)
-        ptychoPINNModelSettings = PtychoPINNModelSettings.createInstance(settingsRegistry)
-        ptychoPINNTrainingSettings = PtychoPINNTrainingSettings.createInstance(settingsRegistry)
         phaseOnlyReconstructor: TrainableReconstructor = NullReconstructor('PhaseOnly')
         amplitudePhaseReconstructor: TrainableReconstructor = NullReconstructor('AmplitudePhase')
         reconstructors: list[TrainableReconstructor] = list()
@@ -214,10 +212,6 @@ class PtychoNNReconstructorLibrary(ReconstructorLibrary):
             reconstructors.append(phaseOnlyReconstructor)
             reconstructors.append(amplitudePhaseReconstructor)
 
-        # Add PtychoPINN reconstructor to the library
-        ptychoPINNReconstructor = PtychoPINNTrainableReconstructor(ptychoPINNModelSettings,
-                                                                    ptychoPINNTrainingSettings)
-        reconstructors.append(ptychoPINNReconstructor)
 
         return cls(modelSettings, trainingSettings, reconstructors)
 
