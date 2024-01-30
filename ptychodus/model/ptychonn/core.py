@@ -10,6 +10,7 @@ from ...api.observer import Observable, Observer
 from ...api.reconstructor import (NullReconstructor, Reconstructor, ReconstructorLibrary,
                                   TrainableReconstructor)
 from ...api.settings import SettingsRegistry
+from ..ptychopinn import PtychoPINNTrainableReconstructor, PtychoPINNModelSettings, PtychoPINNTrainingSettings
 from ..object import ObjectAPI
 from .settings import PtychoNNModelSettings, PtychoNNTrainingSettings
 
@@ -180,12 +181,15 @@ class PtychoNNReconstructorLibrary(ReconstructorLibrary):
         self.modelPresenter = PtychoNNModelPresenter.createInstance(modelSettings)
         self.trainingPresenter = PtychoNNTrainingPresenter.createInstance(trainingSettings)
         self._reconstructors = reconstructors
+class PtychoNNReconstructorLibrary(ReconstructorLibrary):
 
     @classmethod
     def createInstance(cls, settingsRegistry: SettingsRegistry, objectAPI: ObjectAPI,
                        isDeveloperModeEnabled: bool) -> PtychoNNReconstructorLibrary:
         modelSettings = PtychoNNModelSettings.createInstance(settingsRegistry)
         trainingSettings = PtychoNNTrainingSettings.createInstance(settingsRegistry)
+        ptychoPINNModelSettings = PtychoPINNModelSettings.createInstance(settingsRegistry)
+        ptychoPINNTrainingSettings = PtychoPINNTrainingSettings.createInstance(settingsRegistry)
         phaseOnlyReconstructor: TrainableReconstructor = NullReconstructor('PhaseOnly')
         amplitudePhaseReconstructor: TrainableReconstructor = NullReconstructor('AmplitudePhase')
         reconstructors: list[TrainableReconstructor] = list()
@@ -209,6 +213,11 @@ class PtychoNNReconstructorLibrary(ReconstructorLibrary):
                                                                          enableAmplitude=True)
             reconstructors.append(phaseOnlyReconstructor)
             reconstructors.append(amplitudePhaseReconstructor)
+
+        # Add PtychoPINN reconstructor to the library
+        ptychoPINNReconstructor = PtychoPINNTrainableReconstructor(ptychoPINNModelSettings,
+                                                                    ptychoPINNTrainingSettings)
+        reconstructors.append(ptychoPINNReconstructor)
 
         return cls(modelSettings, trainingSettings, reconstructors)
 
