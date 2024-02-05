@@ -10,6 +10,9 @@ class PtychoPINNModelPresenter(Observer):
     def __init__(self, settings: PtychoPINNModelSettings) -> None:
         self._settings = settings
 
+    def getLearningRateLimits(self) -> Interval[float]:
+        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
+
     # Add methods to interact with individual settings here
     # Similar to those in PtychoNNModelPresenter
     # Example:
@@ -38,6 +41,9 @@ class PtychoPINNModelPresenter(Observer):
         self._settings.batch_size.value = value
 
     # ... methods for other settings continue ...
+    def getNFiltersScaleLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
     def getNFiltersScale(self) -> int:
         return self._settings.n_filters_scale.value
 
@@ -73,6 +79,9 @@ class PtychoPINNModelPresenter(Observer):
 
     def setProbeBig(self, value: bool) -> None:
         self._settings.probe_big.value = value
+
+    def getProbeScaleLimits(self) -> Interval[float]:
+        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
 
     def getProbeScale(self) -> float:
         return float(self._settings.probe_scale.value)
@@ -120,6 +129,9 @@ class PtychoPINNTrainingPresenter(Observer):
     def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
         self._settings = settings
 
+    def getMaximumTrainingDatasetSizeLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
     # Add methods to interact with individual settings here
     # Similar to those in PtychoNNTrainingPresenter
     # Example:
@@ -128,6 +140,9 @@ class PtychoPINNTrainingPresenter(Observer):
 
     def setMaximumTrainingDatasetSize(self, value: int) -> None:
         self._settings.maximumTrainingDatasetSize.value = value
+
+    def getValidationSetFractionalSizeLimits(self) -> Interval[float]:
+        return Interval[float](0.0, 1.0)
 
     def getValidationSetFractionalSize(self) -> float:
         return float(self._settings.validationSetFractionalSize.value)
@@ -140,6 +155,9 @@ class PtychoPINNTrainingPresenter(Observer):
 
     def setOptimizationEpochsPerHalfCycle(self, value: int) -> None:
         self._settings.optimizationEpochsPerHalfCycle.value = value
+
+    def getMaximumLearningRateLimits(self) -> Interval[float]:
+        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
 
     def getMaximumLearningRate(self) -> float:
         return float(self._settings.maximumLearningRate.value)
@@ -185,11 +203,17 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         pass
         # Update internal state based on changes in settings
         pass
+    def getMAEWeightLimits(self) -> Interval[float]:
+        return Interval[float](0.0, self.MAX_FLOAT)
+
     def getMAEWeight(self) -> float:
         return float(self._settings.mae_weight.value)
 
     def setMAEWeight(self, value: float) -> None:
         self._settings.mae_weight.value = value
+
+    def getNLLWeightLimits(self) -> Interval[float]:
+        return Interval[float](0.0, self.MAX_FLOAT)
 
     def getNLLWeight(self) -> float:
         return float(self._settings.nll_weight.value)
@@ -197,11 +221,17 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
     def setNLLWeight(self, value: float) -> None:
         self._settings.nll_weight.value = value
 
+    def getTVWeightLimits(self) -> Interval[float]:
+        return Interval[float](0.0, self.MAX_FLOAT)
+
     def getTVWeight(self) -> float:
         return float(self._settings.tv_weight.value)
 
     def setTVWeight(self, value: float) -> None:
         self._settings.tv_weight.value = value
+
+    def getRealspaceMAEWeightLimits(self) -> Interval[float]:
+        return Interval[float](0.0, self.MAX_FLOAT)
 
     def getRealspaceMAEWeight(self) -> float:
         return float(self._settings.realspace_mae_weight.value)
@@ -209,11 +239,17 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
     def setRealspaceMAEWeight(self, value: float) -> None:
         self._settings.realspace_mae_weight.value = value
 
+    def getRealspaceWeightLimits(self) -> Interval[float]:
+        return Interval[float](0.0, self.MAX_FLOAT)
+
     def getRealspaceWeight(self) -> float:
         return float(self._settings.realspace_weight.value)
 
     def setRealspaceWeight(self, value: float) -> None:
         self._settings.realspace_weight.value = value
+
+    def getSizeLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
 
     def getSize(self) -> int:
         return self._settings.size.value
