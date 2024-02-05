@@ -16,6 +16,108 @@ logger = logging.getLogger(__name__)
 
 
 class PtychoPINNModelPresenter(Observable, Observer):
+    def getOffset(self) -> int:
+        return self._settings.offset.value
+
+    def setOffset(self, value: int) -> None:
+        self._settings.offset.value = value
+
+    def getGridsize(self) -> int:
+        return self._settings.gridsize.value
+
+    def setGridsize(self, value: int) -> None:
+        self._settings.gridsize.value = value
+
+    def getOuterOffsetTrain(self) -> int:
+        return self._settings.outer_offset_train.value
+
+    def setOuterOffsetTrain(self, value: int) -> None:
+        self._settings.outer_offset_train.value = value
+
+    def getOuterOffsetTest(self) -> int:
+        return self._settings.outer_offset_test.value
+
+    def setOuterOffsetTest(self, value: int) -> None:
+        self._settings.outer_offset_test.value = value
+
+    def getBatchSize(self) -> int:
+        return self._settings.batch_size.value
+
+    def setBatchSize(self, value: int) -> None:
+        self._settings.batch_size.value = value
+
+    def getNEpochs(self) -> int:
+        return self._settings.nepochs.value
+
+    def setNEpochs(self, value: int) -> None:
+        self._settings.nepochs.value = value
+
+    def getNFiltersScale(self) -> int:
+        return self._settings.n_filters_scale.value
+
+    def setNFiltersScale(self, value: int) -> None:
+        self._settings.n_filters_scale.value = value
+
+    def getNPhotons(self) -> Decimal:
+        return self._settings.nphotons.value
+
+    def setNPhotons(self, value: Decimal) -> None:
+        self._settings.nphotons.value = value
+
+    def isProbeTrainable(self) -> bool:
+        return self._settings.probe_trainable.value
+
+    def setProbeTrainable(self, enabled: bool) -> None:
+        self._settings.probe_trainable.value = enabled
+
+    def isIntensityScaleTrainable(self) -> bool:
+        return self._settings.intensity_scale_trainable.value
+
+    def setIntensityScaleTrainable(self, enabled: bool) -> None:
+        self._settings.intensity_scale_trainable.value = enabled
+
+    def isObjectBig(self) -> bool:
+        return self._settings.object_big.value
+
+    def setObjectBig(self, enabled: bool) -> None:
+        self._settings.object_big.value = enabled
+
+    def isProbeBig(self) -> bool:
+        return self._settings.probe_big.value
+
+    def setProbeBig(self, enabled: bool) -> None:
+        self._settings.probe_big.value = enabled
+
+    def getProbeScale(self) -> Decimal:
+        return self._settings.probe_scale.value
+
+    def setProbeScale(self, value: Decimal) -> None:
+        self._settings.probe_scale.value = value
+
+    def isProbeMask(self) -> bool:
+        return self._settings.probe_mask.value
+
+    def setProbeMask(self, enabled: bool) -> None:
+        self._settings.probe_mask.value = enabled
+
+    def getModelType(self) -> str:
+        return self._settings.model_type.value
+
+    def setModelType(self, model_type: str) -> None:
+        self._settings.model_type.value = model_type
+
+    def getSize(self) -> int:
+        return self._settings.size.value
+
+    def setSize(self, value: int) -> None:
+        self._settings.size.value = value
+
+    def getAmpActivation(self) -> str:
+        return self._settings.amp_activation.value
+
+    def setAmpActivation(self, amp_activation: str) -> None:
+        self._settings.amp_activation.value = amp_activation
+
     MAX_INT: Final[int] = 0x7FFFFFFF
 
     def __init__(self, settings: PtychoPINNModelSettings) -> None:
@@ -50,6 +152,35 @@ class PtychoPINNModelPresenter(Observable, Observer):
 
 
 class PtychoPINNTrainingPresenter(Observable, Observer):
+    def getMAEWeight(self) -> Decimal:
+        return self._settings.mae_weight.value
+
+    def setMAEWeight(self, value: Decimal) -> None:
+        self._settings.mae_weight.value = value
+
+    def getNLLWeight(self) -> Decimal:
+        return self._settings.nll_weight.value
+
+    def setNLLWeight(self, value: Decimal) -> None:
+        self._settings.nll_weight.value = value
+
+    def getTVWeight(self) -> Decimal:
+        return self._settings.tv_weight.value
+
+    def setTVWeight(self, value: Decimal) -> None:
+        self._settings.tv_weight.value = value
+
+    def getRealspaceMAEWeight(self) -> Decimal:
+        return self._settings.realspace_mae_weight.value
+
+    def setRealspaceMAEWeight(self, value: Decimal) -> None:
+        self._settings.realspace_mae_weight.value = value
+
+    def getRealspaceWeight(self) -> Decimal:
+        return self._settings.realspace_weight.value
+
+    def setRealspaceWeight(self, value: Decimal) -> None:
+        self._settings.realspace_weight.value = value
     MAX_INT: Final[int] = 0x7FFFFFFF
 
     def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
