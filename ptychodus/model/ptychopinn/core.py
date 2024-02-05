@@ -11,7 +11,7 @@ class PtychoPINNModelPresenter(Observer):
         self._settings = settings
 
     def getLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
+        return Interval[float](1e-6, 1.0)
 
     # Add methods to interact with individual settings here
     # Similar to those in PtychoNNModelPresenter
@@ -21,14 +21,14 @@ class PtychoPINNModelPresenter(Observer):
     MAX_FLOAT: Final[float] = 1e38
 
     def getLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
+        return Interval[float](1e-6, 1.0)
 
     MAX_INT: Final[int] = 0x7FFFFFFF
     MIN_FLOAT: Final[float] = 1e-38
     MAX_FLOAT: Final[float] = 1e38
 
     def getLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
+        return Interval[float](1e-6, 1.0)
 
     def getLearningRate(self) -> float:
         return float(self._settings.learningRate.value)
@@ -62,7 +62,7 @@ class PtychoPINNModelPresenter(Observer):
         return Interval[int](1, self.MAX_INT)
 
     def getNFiltersScaleLimits(self) -> Interval[int]:
-        return Interval[int](1, self.MAX_INT)
+        return Interval[int](1, 10)
 
     def getNFiltersScale(self) -> int:
         return self._settings.n_filters_scale.value
@@ -107,7 +107,7 @@ class PtychoPINNModelPresenter(Observer):
         return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
 
     def getProbeScaleLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
+        return Interval[float](0.1, 100.0)
 
     def getProbeScale(self) -> float:
         return float(self._settings.probe_scale.value)
@@ -173,7 +173,7 @@ class PtychoPINNTrainingPresenter(Observer):
     MAX_FLOAT: Final[float] = 1e38
 
     def getMaximumTrainingDatasetSizeLimits(self) -> Interval[int]:
-        return Interval[int](1, self.MAX_INT)
+        return Interval[int](100, 1000000)
 
     def getMaximumTrainingDatasetSize(self) -> int:
         return self._settings.maximumTrainingDatasetSize.value
@@ -188,7 +188,7 @@ class PtychoPINNTrainingPresenter(Observer):
         return Interval[float](0.0, 1.0)
 
     def getValidationSetFractionalSizeLimits(self) -> Interval[float]:
-        return Interval[float](0.0, 1.0)
+        return Interval[float](0.01, 0.5)
 
     def getValidationSetFractionalSize(self) -> float:
         return float(self._settings.validationSetFractionalSize.value)
@@ -209,7 +209,7 @@ class PtychoPINNTrainingPresenter(Observer):
         return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
 
     def getMaximumLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
+        return Interval[float](1e-6, 1e-2)
 
     def getMaximumLearningRate(self) -> float:
         return float(self._settings.maximumLearningRate.value)
@@ -262,7 +262,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         return Interval[float](0.0, self.MAX_FLOAT)
 
     def getMAEWeightLimits(self) -> Interval[float]:
-        return Interval[float](0.0, self.MAX_FLOAT)
+        return Interval[float](0.0, 1.0)
 
     def getMAEWeight(self) -> float:
         return float(self._settings.mae_weight.value)
@@ -277,7 +277,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         return Interval[float](0.0, self.MAX_FLOAT)
 
     def getNLLWeightLimits(self) -> Interval[float]:
-        return Interval[float](0.0, self.MAX_FLOAT)
+        return Interval[float](0.0, 1.0)
 
     def getNLLWeight(self) -> float:
         return float(self._settings.nll_weight.value)
@@ -292,7 +292,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         return Interval[float](0.0, self.MAX_FLOAT)
 
     def getTVWeightLimits(self) -> Interval[float]:
-        return Interval[float](0.0, self.MAX_FLOAT)
+        return Interval[float](0.0, 1.0)
 
     def getTVWeight(self) -> float:
         return float(self._settings.tv_weight.value)
@@ -307,7 +307,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         return Interval[float](0.0, self.MAX_FLOAT)
 
     def getRealspaceMAEWeightLimits(self) -> Interval[float]:
-        return Interval[float](0.0, self.MAX_FLOAT)
+        return Interval[float](0.0, 1.0)
 
     def getRealspaceMAEWeight(self) -> float:
         return float(self._settings.realspace_mae_weight.value)
@@ -322,7 +322,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         return Interval[float](0.0, self.MAX_FLOAT)
 
     def getRealspaceWeightLimits(self) -> Interval[float]:
-        return Interval[float](0.0, self.MAX_FLOAT)
+        return Interval[float](0.0, 1.0)
 
     def getRealspaceWeight(self) -> float:
         return float(self._settings.realspace_weight.value)
@@ -337,7 +337,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         return Interval[int](1, self.MAX_INT)
 
     def getSizeLimits(self) -> Interval[int]:
-        return Interval[int](1, self.MAX_INT)
+        return Interval[int](64, 4096)
 
     def getSize(self) -> int:
         return self._settings.size.value
