@@ -19,7 +19,25 @@ class PtychoPINNModelPresenter(Observer):
     def setLearningRate(self, value: float) -> None:
         self._settings.learningRate.value = value
 
-    # ... additional methods for other settings
+    def getN(self) -> int:
+        return self._settings.N.value
+
+    def setN(self, value: int) -> None:
+        self._settings.N.value = value
+
+    def getGridsize(self) -> int:
+        return self._settings.gridsize.value
+
+    def setGridsize(self, value: int) -> None:
+        self._settings.gridsize.value = value
+
+    def getBatchSize(self) -> int:
+        return self._settings.batch_size.value
+
+    def setBatchSize(self, value: int) -> None:
+        self._settings.batch_size.value = value
+
+    # ... methods for other settings continue ...
 
 class PtychoPINNTrainingPresenter(Observer):
     def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
@@ -34,7 +52,25 @@ class PtychoPINNTrainingPresenter(Observer):
     def setMaximumTrainingDatasetSize(self, value: int) -> None:
         self._settings.maximumTrainingDatasetSize.value = value
 
-    # ... additional methods for other settings
+    def getValidationSetFractionalSize(self) -> float:
+        return float(self._settings.validationSetFractionalSize.value)
+
+    def setValidationSetFractionalSize(self, value: float) -> None:
+        self._settings.validationSetFractionalSize.value = value
+
+    def getOptimizationEpochsPerHalfCycle(self) -> int:
+        return self._settings.optimizationEpochsPerHalfCycle.value
+
+    def setOptimizationEpochsPerHalfCycle(self, value: int) -> None:
+        self._settings.optimizationEpochsPerHalfCycle.value = value
+
+    def getMaximumLearningRate(self) -> float:
+        return float(self._settings.maximumLearningRate.value)
+
+    def setMaximumLearningRate(self, value: float) -> None:
+        self._settings.maximumLearningRate.value = value
+
+    # ... methods for other settings continue ...
 
 class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
 
