@@ -184,6 +184,12 @@ class PtychoPINNModelPresenter(Observable, Observer):
 
 
 class PtychoPINNTrainingPresenter(Observable, Observer):
+    def isSaveTrainingArtifactsEnabled(self) -> bool:
+        return self._settings.saveTrainingArtifacts.value
+
+    def setSaveTrainingArtifactsEnabled(self, enabled: bool) -> None:
+        self._settings.saveTrainingArtifacts.value = enabled
+
     def getMAEWeightLimits(self) -> Interval[Decimal]:
         return Interval[Decimal](Decimal('0'), Decimal('1'))
 
