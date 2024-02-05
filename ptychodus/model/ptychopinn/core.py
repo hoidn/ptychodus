@@ -184,6 +184,28 @@ class PtychoPINNModelPresenter(Observable, Observer):
 
 
 class PtychoPINNTrainingPresenter(Observable, Observer):
+    def getOutputPath(self) -> Path:
+        return self._settings.outputPath.value
+
+    def setOutputPath(self, directory: Path) -> None:
+        self._settings.outputPath.value = directory
+
+    def getOutputSuffix(self) -> str:
+        return self._settings.outputSuffix.value
+
+    def setOutputSuffix(self, suffix: str) -> None:
+        self._settings.outputSuffix.value = suffix
+
+    def getStatusIntervalInEpochsLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
+    def getStatusIntervalInEpochs(self) -> int:
+        limits = self.getStatusIntervalInEpochsLimits()
+        return limits.clamp(self._settings.statusIntervalInEpochs.value)
+
+    def setStatusIntervalInEpochs(self, value: int) -> None:
+        self._settings.statusIntervalInEpochs.value = value
+
     def isSaveTrainingArtifactsEnabled(self) -> bool:
         return self._settings.saveTrainingArtifacts.value
 
