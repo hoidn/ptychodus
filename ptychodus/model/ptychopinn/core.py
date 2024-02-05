@@ -42,13 +42,23 @@ class PtychoPINNTrainingPresenter(Observable, Observer):
         super().__init__()
         self._settings = settings
 
+    def getEpochsLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
+    def getEpochs(self) -> int:
+        limits = self.getEpochsLimits()
+        return limits.clamp(self._settings.epochs.value)
+
+    def setEpochs(self, value: int) -> None:
+        self._settings.epochs.value = value
+
     @classmethod
     def createInstance(cls, settings: PtychoPINNTrainingSettings) -> PtychoPINNTrainingPresenter:
         presenter = cls(settings)
         settings.addObserver(presenter)
         return presenter
 
-    # Define methods to interact with training settings, similar to PtychoNNTrainingPresenter
+    # Methods to interact with training settings have been defined
 
     def update(self, observable: Observable) -> None:
         if observable is self._settings:
