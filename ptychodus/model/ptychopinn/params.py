@@ -4,6 +4,7 @@ Stores global variables for data generation and model configuration
 # TODO naming convention for different types of parameters
 # TODO what default value and initialization for the probe scale?
 cfg = {
+    # Shared settings with model/ptychopinn/settings.py
     'N': 64, 'offset': 4, 'gridsize': 2,
     'outer_offset_train': None, 'outer_offset_test': None, 'batch_size': 16,
     'nepochs': 60, 'n_filters_scale': 2, 'output_prefix': 'outputs',
@@ -43,6 +44,29 @@ def params():
     d = {k:v for k, v in cfg.items()}
     d['bigN'] = get_bigN()
     return d
+
+def update_cfg_from_settings(settings_registry: SettingsRegistry):
+    settings_dict = settings_registry.to_dict()
+    ptychopinn_settings = settings_dict.get('PtychoPINN', {})
+    ptychopinn_training_settings = settings_dict.get('PtychoPINNTraining', {})
+
+    # Update shared settings
+    cfg['N'] = int(ptychopinn_settings.get('N', cfg['N']))
+    cfg['gridsize'] = int(ptychopinn_settings.get('Gridsize', cfg['gridsize']))
+    cfg['batch_size'] = int(ptychopinn_settings.get('BatchSize', cfg['batch_size']))
+    cfg['n_filters_scale'] = int(ptychopinn_settings.get('NFiltersScale', cfg['n_filters_scale']))
+    cfg['output_prefix'] = str(ptychopinn_settings.get('OutputPrefix', cfg['output_prefix']))
+    cfg['default_probe_scale'] = float(ptychopinn_settings.get('DefaultProbeScale', cfg['default_probe_scale']))
+    cfg['nphotons'] = float(ptychopinn_settings.get('NPhotons', cfg['nphotons']))
+    cfg['object.big'] = bool(ptychopinn_settings.get('ObjectBig', cfg['object.big']))
+    cfg['probe.big'] = bool(ptychopinn_settings.get('ProbeBig', cfg['probe.big']))
+    cfg['probe_scale'] = float(ptychopinn_settings.get('ProbeScale', cfg['probe_scale']))
+    cfg['probe.mask'] = bool(ptychopinn_settings.get('ProbeMask', cfg['probe.mask']))
+    cfg['model_type'] = str(ptychopinn_settings.get('ModelType', cfg['model_type']))
+    cfg['amp_activation'] = str(ptychopinn_settings.get('AmpActivation', cfg['amp_activation']))
+
+    # Settings specific to training
+    # Note: Some settings may not be directly transferable and may require additional logic
 
 # TODO refactor
 def validate():
