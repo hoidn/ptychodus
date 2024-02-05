@@ -38,6 +38,83 @@ class PtychoPINNModelPresenter(Observer):
         self._settings.batch_size.value = value
 
     # ... methods for other settings continue ...
+    def getNFiltersScale(self) -> int:
+        return self._settings.n_filters_scale.value
+
+    def setNFiltersScale(self, value: int) -> None:
+        self._settings.n_filters_scale.value = value
+
+    def getOutputPrefix(self) -> str:
+        return self._settings.output_prefix.value
+
+    def setOutputPrefix(self, value: str) -> None:
+        self._settings.output_prefix.value = value
+
+    def getDefaultProbeScale(self) -> float:
+        return float(self._settings.default_probe_scale.value)
+
+    def setDefaultProbeScale(self, value: float) -> None:
+        self._settings.default_probe_scale.value = value
+
+    def getNPhotons(self) -> float:
+        return float(self._settings.nphotons.value)
+
+    def setNPhotons(self, value: float) -> None:
+        self._settings.nphotons.value = value
+
+    def getObjectBig(self) -> bool:
+        return self._settings.object_big.value
+
+    def setObjectBig(self, value: bool) -> None:
+        self._settings.object_big.value = value
+
+    def getProbeBig(self) -> bool:
+        return self._settings.probe_big.value
+
+    def setProbeBig(self, value: bool) -> None:
+        self._settings.probe_big.value = value
+
+    def getProbeScale(self) -> float:
+        return float(self._settings.probe_scale.value)
+
+    def setProbeScale(self, value: float) -> None:
+        self._settings.probe_scale.value = value
+
+    def getProbeMask(self) -> bool:
+        return self._settings.probe_mask.value
+
+    def setProbeMask(self, value: bool) -> None:
+        self._settings.probe_mask.value = value
+
+    def getModelType(self) -> str:
+        return self._settings.model_type.value
+
+    def setModelType(self, value: str) -> None:
+        self._settings.model_type.value = value
+
+    def getAmpActivation(self) -> str:
+        return self._settings.amp_activation.value
+
+    def setAmpActivation(self, value: str) -> None:
+        self._settings.amp_activation.value = value
+
+    def getProbeTrainable(self) -> bool:
+        return self._settings.probe_trainable.value
+
+    def setProbeTrainable(self, value: bool) -> None:
+        self._settings.probe_trainable.value = value
+
+    def getIntensityScaleTrainable(self) -> bool:
+        return self._settings.intensity_scale_trainable.value
+
+    def setIntensityScaleTrainable(self, value: bool) -> None:
+        self._settings.intensity_scale_trainable.value = value
+
+    def getPositionsProvided(self) -> bool:
+        return self._settings.positions_provided.value
+
+    def setPositionsProvided(self, value: bool) -> None:
+        self._settings.positions_provided.value = value
 
 class PtychoPINNTrainingPresenter(Observer):
     def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
@@ -108,3 +185,38 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
         pass
         # Update internal state based on changes in settings
         pass
+    def getMAEWeight(self) -> float:
+        return float(self._settings.mae_weight.value)
+
+    def setMAEWeight(self, value: float) -> None:
+        self._settings.mae_weight.value = value
+
+    def getNLLWeight(self) -> float:
+        return float(self._settings.nll_weight.value)
+
+    def setNLLWeight(self, value: float) -> None:
+        self._settings.nll_weight.value = value
+
+    def getTVWeight(self) -> float:
+        return float(self._settings.tv_weight.value)
+
+    def setTVWeight(self, value: float) -> None:
+        self._settings.tv_weight.value = value
+
+    def getRealspaceMAEWeight(self) -> float:
+        return float(self._settings.realspace_mae_weight.value)
+
+    def setRealspaceMAEWeight(self, value: float) -> None:
+        self._settings.realspace_mae_weight.value = value
+
+    def getRealspaceWeight(self) -> float:
+        return float(self._settings.realspace_weight.value)
+
+    def setRealspaceWeight(self, value: float) -> None:
+        self._settings.realspace_weight.value = value
+
+    def getSize(self) -> int:
+        return self._settings.size.value
+
+    def setSize(self, value: int) -> None:
+        self._settings.size.value = value
