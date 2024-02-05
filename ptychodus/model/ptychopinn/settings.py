@@ -22,30 +22,14 @@ class PtychoPINNModelSettings(Observable, Observer):
         self.batch_size = settingsGroup.createIntegerEntry('BatchSize', 16)
         self.nepochs = settingsGroup.createIntegerEntry('NEpochs', 60)
         self.n_filters_scale = settingsGroup.createIntegerEntry('NFiltersScale', 2)
-        self.output_prefix = settingsGroup.createStringEntry('OutputPrefix', 'outputs')
-        self.big_gridsize = settingsGroup.createIntegerEntry('BigGridsize', 10)
-        self.max_position_jitter = settingsGroup.createIntegerEntry('MaxPositionJitter', 10)
-        self.sim_jitter_scale = settingsGroup.createRealEntry('SimJitterScale', '0.')
-        self.default_probe_scale = settingsGroup.createRealEntry('DefaultProbeScale', '0.7')
-        self.mae_weight = settingsGroup.createRealEntry('MAEWeight', '0.')
-        self.nll_weight = settingsGroup.createRealEntry('NLLWeight', '1.')
-        self.tv_weight = settingsGroup.createRealEntry('TVWeight', '0.')
-        self.realspace_mae_weight = settingsGroup.createRealEntry('RealspaceMAEWeight', '0.')
-        self.realspace_weight = settingsGroup.createRealEntry('RealspaceWeight', '0.')
         self.nphotons = settingsGroup.createRealEntry('NPhotons', '1e9')
-        self.nimgs_train = settingsGroup.createIntegerEntry('NImgsTrain', 9)
-        self.nimgs_test = settingsGroup.createIntegerEntry('NImgsTest', 3)
-        self.data_source = settingsGroup.createStringEntry('DataSource', 'lines')
         self.probe_trainable = settingsGroup.createBooleanEntry('ProbeTrainable', False)
         self.intensity_scale_trainable = settingsGroup.createBooleanEntry('IntensityScaleTrainable', False)
-        self.positions_provided = settingsGroup.createBooleanEntry('PositionsProvided', False)
         self.object_big = settingsGroup.createBooleanEntry('ObjectBig', True)
         self.probe_big = settingsGroup.createBooleanEntry('ProbeBig', False)
         self.probe_scale = settingsGroup.createRealEntry('ProbeScale', '10.')
-        self.set_phi = settingsGroup.createBooleanEntry('SetPhi', False)
         self.probe_mask = settingsGroup.createBooleanEntry('ProbeMask', True)
         self.model_type = settingsGroup.createStringEntry('ModelType', 'pinn')
-        self.label = settingsGroup.createStringEntry('Label', '')
         self.size = settingsGroup.createIntegerEntry('Size', 392)
         self.amp_activation = settingsGroup.createStringEntry('AmpActivation', 'sigmoid')
 
@@ -66,9 +50,28 @@ class PtychoPINNTrainingSettings(Observable, Observer):
     def __init__(self, settingsGroup: SettingsGroup) -> None:
         super().__init__()
         self._settingsGroup = settingsGroup
-        # Define training settings specific to PtychoPINN
-        # Example:
-        self.epochs = settingsGroup.createIntegerEntry('Epochs', 100)
+
+        # generic settings shared with ptychonn
+        self.maximumTrainingDatasetSize = settingsGroup.createIntegerEntry(
+            'MaximumTrainingDatasetSize', 100000)
+        self.validationSetFractionalSize = settingsGroup.createRealEntry(
+            'ValidationSetFractionalSize', '0.1')
+        self.optimizationEpochsPerHalfCycle = settingsGroup.createIntegerEntry(
+            'OptimizationEpochsPerHalfCycle', 6)
+        self.maximumLearningRate = settingsGroup.createRealEntry('MaximumLearningRate', '1e-3')
+        self.minimumLearningRate = settingsGroup.createRealEntry('MinimumLearningRate', '1e-4')
+        self.trainingEpochs = settingsGroup.createIntegerEntry('TrainingEpochs', 50)
+        self.saveTrainingArtifacts = settingsGroup.createBooleanEntry(
+            'SaveTrainingArtifacts', False)
+        self.outputPath = settingsGroup.createPathEntry('OutputPath', Path('/path/to/output'))
+        self.outputSuffix = settingsGroup.createStringEntry('OutputSuffix', 'suffix')
+
+        # ptychopinn specific settings
+        self.mae_weight = settingsGroup.createRealEntry('MAEWeight', '0.')
+        self.nll_weight = settingsGroup.createRealEntry('NLLWeight', '1.')
+        self.tv_weight = settingsGroup.createRealEntry('TVWeight', '0.')
+        self.realspace_mae_weight = settingsGroup.createRealEntry('RealspaceMAEWeight', '0.')
+        self.realspace_weight = settingsGroup.createRealEntry('RealspaceWeight', '0.')
 
     @classmethod
     def createInstance(cls, settingsRegistry: SettingsRegistry) -> PtychoPINNTrainingSettings:
