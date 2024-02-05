@@ -20,16 +20,6 @@ class PtychoPINNModelPresenter(Observer):
     MIN_FLOAT: Final[float] = 1e-38
     MAX_FLOAT: Final[float] = 1e38
 
-    def getLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](1e-6, 1.0)
-
-    MAX_INT: Final[int] = 0x7FFFFFFF
-    MIN_FLOAT: Final[float] = 1e-38
-    MAX_FLOAT: Final[float] = 1e38
-
-    def getLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](1e-6, 1.0)
-
     def getLearningRate(self) -> float:
         return float(self._settings.learningRate.value)
 
@@ -114,12 +104,6 @@ class PtychoPINNModelPresenter(Observer):
     def setPositionsProvided(self, value: bool) -> None:
         self._settings.positions_provided.value = value
     def getNFiltersScaleLimits(self) -> Interval[int]:
-        return Interval[int](1, self.MAX_INT)
-
-    def getNFiltersScaleLimits(self) -> Interval[int]:
-        return Interval[int](1, self.MAX_INT)
-
-    def getNFiltersScaleLimits(self) -> Interval[int]:
         return Interval[int](1, 10)
 
     def getNFiltersScale(self) -> int:
@@ -157,12 +141,6 @@ class PtychoPINNModelPresenter(Observer):
 
     def setProbeBig(self, value: bool) -> None:
         self._settings.probe_big.value = value
-
-    def getProbeScaleLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
-
-    def getProbeScaleLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
 
     def getProbeScaleLimits(self) -> Interval[float]:
         return Interval[float](0.1, 100.0)
