@@ -117,6 +117,16 @@ class SettingsGroup(Observable, Observer):
 class SettingsRegistry(Observable):
     PREFIX_PLACEHOLDER_TEXT: Final[str] = 'PREFIX'
 
+    # Method to export settings to a nested dictionary
+    def to_dict(self) -> dict[str, dict[str, Any]]:
+        settings_dict = {}
+        for group in self._groupList:
+            group_dict = {}
+            for entry in group:
+                group_dict[entry.name] = entry.value
+            settings_dict[group.name] = group_dict
+        return settings_dict
+
     def __init__(self, replacementPathPrefix: str | None) -> None:
         super().__init__()
         self._replacementPathPrefix = replacementPathPrefix
