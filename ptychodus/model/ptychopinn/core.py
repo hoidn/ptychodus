@@ -16,6 +16,24 @@ logger = logging.getLogger(__name__)
 
 
 class PtychoPINNModelPresenter(Observable, Observer):
+    def getGridsizeLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
+    def getNEpochsLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
+    def getNFiltersScaleLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
+    def getNPhotonsLimits(self) -> Interval[Decimal]:
+        return Interval[Decimal](Decimal('1e0'), Decimal('1e12'))
+
+    def getProbeScaleLimits(self) -> Interval[Decimal]:
+        return Interval[Decimal](Decimal('1e-3'), Decimal('1e3'))
+
+    def getSizeLimits(self) -> Interval[int]:
+        return Interval[int](1, self.MAX_INT)
+
     def getOffset(self) -> int:
         return self._settings.offset.value
 
@@ -152,6 +170,20 @@ class PtychoPINNModelPresenter(Observable, Observer):
 
 
 class PtychoPINNTrainingPresenter(Observable, Observer):
+    def getMAEWeightLimits(self) -> Interval[Decimal]:
+        return Interval[Decimal](Decimal('0'), Decimal('1'))
+
+    def getNLLWeightLimits(self) -> Interval[Decimal]:
+        return Interval[Decimal](Decimal('0'), Decimal('1'))
+
+    def getTVWeightLimits(self) -> Interval[Decimal]:
+        return Interval[Decimal](Decimal('0'), Decimal('1'))
+
+    def getRealspaceMAEWeightLimits(self) -> Interval[Decimal]:
+        return Interval[Decimal](Decimal('0'), Decimal('1'))
+
+    def getRealspaceWeightLimits(self) -> Interval[Decimal]:
+        return Interval[Decimal](Decimal('0'), Decimal('1'))
     def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
         super().__init__()
         self._settings = settings
