@@ -20,6 +20,8 @@ class PtychoPINNModelPresenter(Observer):
     MIN_FLOAT: Final[float] = 1e-38
     MAX_FLOAT: Final[float] = 1e38
 
+
+
     def getLearningRate(self) -> float:
         return float(self._settings.learningRate.value)
 
@@ -104,43 +106,10 @@ class PtychoPINNModelPresenter(Observer):
     def setPositionsProvided(self, value: bool) -> None:
         self._settings.positions_provided.value = value
     def getNFiltersScaleLimits(self) -> Interval[int]:
-        return Interval[int](1, 10)
-
-    def getNFiltersScale(self) -> int:
-        return self._settings.n_filters_scale.value
+        return Interval[int](1, self.MAX_INT)
 
     def setNFiltersScale(self, value: int) -> None:
         self._settings.n_filters_scale.value = value
-
-    def getOutputPrefix(self) -> str:
-        return self._settings.output_prefix.value
-
-    def setOutputPrefix(self, value: str) -> None:
-        self._settings.output_prefix.value = value
-
-    def getDefaultProbeScale(self) -> float:
-        return float(self._settings.default_probe_scale.value)
-
-    def setDefaultProbeScale(self, value: float) -> None:
-        self._settings.default_probe_scale.value = value
-
-    def getNPhotons(self) -> float:
-        return float(self._settings.nphotons.value)
-
-    def setNPhotons(self, value: float) -> None:
-        self._settings.nphotons.value = value
-
-    def getObjectBig(self) -> bool:
-        return self._settings.object_big.value
-
-    def setObjectBig(self, value: bool) -> None:
-        self._settings.object_big.value = value
-
-    def getProbeBig(self) -> bool:
-        return self._settings.probe_big.value
-
-    def setProbeBig(self, value: bool) -> None:
-        self._settings.probe_big.value = value
 
     def getProbeScaleLimits(self) -> Interval[float]:
         return Interval[float](0.1, 100.0)
@@ -157,59 +126,8 @@ class PtychoPINNModelPresenter(Observer):
     def setProbeMask(self, value: bool) -> None:
         self._settings.probe_mask.value = value
 
-    def getModelType(self) -> str:
-        return self._settings.model_type.value
-
-    def setModelType(self, value: str) -> None:
-        self._settings.model_type.value = value
-
-    def getAmpActivation(self) -> str:
-        return self._settings.amp_activation.value
-
-    def setAmpActivation(self, value: str) -> None:
-        self._settings.amp_activation.value = value
-
-    def getProbeTrainable(self) -> bool:
-        return self._settings.probe_trainable.value
-
-    def setProbeTrainable(self, value: bool) -> None:
-        self._settings.probe_trainable.value = value
-
-    def getIntensityScaleTrainable(self) -> bool:
-        return self._settings.intensity_scale_trainable.value
-
-    def setIntensityScaleTrainable(self, value: bool) -> None:
-        self._settings.intensity_scale_trainable.value = value
-
-    def getPositionsProvided(self) -> bool:
-        return self._settings.positions_provided.value
-
-    def setPositionsProvided(self, value: bool) -> None:
-        self._settings.positions_provided.value = value
-
-class PtychoPINNTrainingPresenter(Observer):
-    def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
-        self._settings = settings
-
     def getMaximumTrainingDatasetSizeLimits(self) -> Interval[int]:
         return Interval[int](1, self.MAX_INT)
-
-    # Add methods to interact with individual settings here
-    # Similar to those in PtychoNNTrainingPresenter
-    # Example:
-    MAX_INT: Final[int] = 0x7FFFFFFF
-    MIN_FLOAT: Final[float] = 1e-38
-    MAX_FLOAT: Final[float] = 1e38
-
-    def getMaximumTrainingDatasetSizeLimits(self) -> Interval[int]:
-        return Interval[int](1, self.MAX_INT)
-
-    MAX_INT: Final[int] = 0x7FFFFFFF
-    MIN_FLOAT: Final[float] = 1e-38
-    MAX_FLOAT: Final[float] = 1e38
-
-    def getMaximumTrainingDatasetSizeLimits(self) -> Interval[int]:
-        return Interval[int](100, 1000000)
 
     def getMaximumTrainingDatasetSize(self) -> int:
         return self._settings.maximumTrainingDatasetSize.value
@@ -219,15 +137,6 @@ class PtychoPINNTrainingPresenter(Observer):
 
     def getValidationSetFractionalSizeLimits(self) -> Interval[float]:
         return Interval[float](0.0, 1.0)
-
-    def getValidationSetFractionalSizeLimits(self) -> Interval[float]:
-        return Interval[float](0.0, 1.0)
-
-    def getValidationSetFractionalSizeLimits(self) -> Interval[float]:
-        return Interval[float](0.01, 0.5)
-
-    def getValidationSetFractionalSize(self) -> float:
-        return float(self._settings.validationSetFractionalSize.value)
 
     def setValidationSetFractionalSize(self, value: float) -> None:
         self._settings.validationSetFractionalSize.value = value
@@ -241,77 +150,8 @@ class PtychoPINNTrainingPresenter(Observer):
     def getMaximumLearningRateLimits(self) -> Interval[float]:
         return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
 
-    def getMaximumLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](self.MIN_FLOAT, self.MAX_FLOAT)
-
-    def getMaximumLearningRateLimits(self) -> Interval[float]:
-        return Interval[float](1e-6, 1e-2)
-
-    def getMaximumLearningRate(self) -> float:
-        return float(self._settings.maximumLearningRate.value)
-
     def setMaximumLearningRate(self, value: float) -> None:
         self._settings.maximumLearningRate.value = value
-
-    def getOutputPrefix(self) -> str:
-        return self._settings.output_prefix.value
-
-    def setOutputPrefix(self, value: str) -> None:
-        self._settings.output_prefix.value = value
-
-    def getDefaultProbeScale(self) -> float:
-        return float(self._settings.default_probe_scale.value)
-
-    def setDefaultProbeScale(self, value: float) -> None:
-        self._settings.default_probe_scale.value = value
-
-    def getNPhotons(self) -> float:
-        return float(self._settings.nphotons.value)
-
-    def setNPhotons(self, value: float) -> None:
-        self._settings.nphotons.value = value
-
-    def getObjectBig(self) -> bool:
-        return self._settings.object_big.value
-
-    def setObjectBig(self, value: bool) -> None:
-        self._settings.object_big.value = value
-
-    def getProbeBig(self) -> bool:
-        return self._settings.probe_big.value
-
-    def setProbeBig(self, value: bool) -> None:
-        self._settings.probe_big.value = value
-
-    def getModelType(self) -> str:
-        return self._settings.model_type.value
-
-    def setModelType(self, value: str) -> None:
-        self._settings.model_type.value = value
-
-    def getAmpActivation(self) -> str:
-        return self._settings.amp_activation.value
-
-    def setAmpActivation(self, value: str) -> None:
-        self._settings.amp_activation.value = value
-
-    def getProbeTrainable(self) -> bool:
-        return self._settings.probe_trainable.value
-
-    def setProbeTrainable(self, value: bool) -> None:
-        self._settings.probe_trainable.value = value
-
-    def getIntensityScaleTrainable(self) -> bool:
-        return self._settings.intensity_scale_trainable.value
-
-    def setIntensityScaleTrainable(self, value: bool) -> None:
-        self._settings.intensity_scale_trainable.value = value
-
-    def getPositionsProvided(self) -> bool:
-        return self._settings.positions_provided.value
-
-    def setPositionsProvided(self, value: bool) -> None:
-        self._settings.positions_provided.value = value
 
 class PtychoPINNReconstructorLibrary(ReconstructorLibrary, Observer):
 
