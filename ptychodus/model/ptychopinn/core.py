@@ -152,6 +152,10 @@ class PtychoPINNModelPresenter(Observable, Observer):
 
 
 class PtychoPINNTrainingPresenter(Observable, Observer):
+    def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
+        super().__init__()
+        self._settings = settings
+
     def getMAEWeight(self) -> Decimal:
         return self._settings.mae_weight.value
 
@@ -182,10 +186,6 @@ class PtychoPINNTrainingPresenter(Observable, Observer):
     def setRealspaceWeight(self, value: Decimal) -> None:
         self._settings.realspace_weight.value = value
     MAX_INT: Final[int] = 0x7FFFFFFF
-
-    def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
-        super().__init__()
-        self._settings = settings
 
     def getEpochsLimits(self) -> Interval[int]:
         return Interval[int](1, self.MAX_INT)
