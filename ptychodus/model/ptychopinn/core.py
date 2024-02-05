@@ -16,6 +16,20 @@ logger = logging.getLogger(__name__)
 
 
 class PtychoPINNModelPresenter(Observable, Observer):
+    _fileFilterList: list[str] = ['PyTorch Model State Files (*.pt *.pth)']
+
+    def getStateFileFilterList(self) -> Sequence[str]:
+        return self._fileFilterList
+
+    def getStateFileFilter(self) -> str:
+        return self._fileFilterList[0]
+
+    def getStateFilePath(self) -> Path:
+        return self._settings.stateFilePath.value
+
+    def setStateFilePath(self, directory: Path) -> None:
+        self._settings.stateFilePath.value = directory
+
     def getGridsizeLimits(self) -> Interval[int]:
         return Interval[int](1, self.MAX_INT)
 
