@@ -22,6 +22,20 @@ class PtychoPINNModelPresenter(Observable, Observer):
         super().__init__()
         self._settings = settings
 
+    def getLearningRate(self) -> Decimal:
+        return self._settings.learningRate.value
+
+    def setLearningRate(self, value: Decimal) -> None:
+        self._settings.learningRate.value = value
+
+    def getN(self) -> int:
+        return self._settings.N.value
+
+    def setN(self, value: int) -> None:
+        self._settings.N.value = value
+
+    # Similar methods for other settings...
+
     @classmethod
     def createInstance(cls, settings: PtychoPINNModelSettings) -> PtychoPINNModelPresenter:
         presenter = cls(settings)
