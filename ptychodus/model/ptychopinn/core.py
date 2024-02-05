@@ -196,16 +196,6 @@ class PtychoPINNTrainingPresenter(Observable, Observer):
     def setOutputSuffix(self, suffix: str) -> None:
         self._settings.outputSuffix.value = suffix
 
-    def getStatusIntervalInEpochsLimits(self) -> Interval[int]:
-        return Interval[int](1, self.MAX_INT)
-
-    def getStatusIntervalInEpochs(self) -> int:
-        limits = self.getStatusIntervalInEpochsLimits()
-        return limits.clamp(self._settings.statusIntervalInEpochs.value)
-
-    def setStatusIntervalInEpochs(self, value: int) -> None:
-        self._settings.statusIntervalInEpochs.value = value
-
     def isSaveTrainingArtifactsEnabled(self) -> bool:
         return self._settings.saveTrainingArtifacts.value
 
