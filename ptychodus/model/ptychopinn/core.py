@@ -71,10 +71,9 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary):
     def createInstance(cls, settingsRegistry: SettingsRegistry) -> PtychoPINNReconstructorLibrary:
         modelSettings = PtychoPINNModelSettings.createInstance(settingsRegistry)
         trainingSettings = PtychoPINNTrainingSettings.createInstance(settingsRegistry)
-        # Define reconstructors specific to PtychoPINN
-        reconstructors: list[TrainableReconstructor] = list()
-
-        # Example: Add PtychoPINN specific reconstructors
+        # Placeholder for adding PtychoPINN specific reconstructors
+        ptychoPINNReconstructor: TrainableReconstructor = NullReconstructor('PtychoPINN')
+        reconstructors: list[TrainableReconstructor] = [ptychoPINNReconstructor]
 
         return cls(modelSettings, trainingSettings, reconstructors)
 
