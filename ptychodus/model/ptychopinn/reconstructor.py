@@ -77,3 +77,40 @@ class ObjectPatchCircularBuffer:
 
     def getBuffer(self) -> FloatArrayType:
         return self._buffer if self._full else self._buffer[:self._pos]
+class PtychoPINNTrainableReconstructor(TrainableReconstructor):
+
+    def __init__(self) -> None:
+        # Placeholder for actual initialization
+        pass
+
+    @property
+    def name(self) -> str:
+        return 'PtychoPINN'
+
+    def reconstruct(self, parameters: ReconstructInput) -> ReconstructOutput:
+        # Placeholder for the reconstruction process
+        return ReconstructOutput.createNull()
+
+    def ingestTrainingData(self, parameters: ReconstructInput) -> None:
+        # Placeholder for ingesting training data
+        pass
+
+    def getSaveFileFilterList(self) -> Sequence[str]:
+        # Placeholder for file filter list
+        return []
+
+    def getSaveFileFilter(self) -> str:
+        # Placeholder for a single file filter
+        return ''
+
+    def saveTrainingData(self, filePath: Path) -> None:
+        # Placeholder for saving training data
+        pass
+
+    def train(self) -> Plot2D:
+        # Placeholder for the training process
+        return Plot2D.createNull()
+
+    def clearTrainingData(self) -> None:
+        # Placeholder for clearing training data
+        pass
