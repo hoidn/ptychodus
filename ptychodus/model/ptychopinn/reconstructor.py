@@ -25,12 +25,65 @@ logger = logging.getLogger(__name__)
 
 
 class PatternCircularBuffer:
-    # This class remains largely unchanged, as it handles data buffering generically
-    # Implementation details here...
+    def __init__(self, extent: ImageExtent, maxSize: int) -> None:
+        self._buffer: FloatArrayType = numpy.zeros(
+            (maxSize, *extent.shape),
+            dtype=numpy.float32,
+        )
+        self._pos = 0
+        self._full = False
+
+    @classmethod
+    def createZeroSized(cls) -> PatternCircularBuffer:
+        return cls(ImageExtent(0, 0), 0)
+
+    @property
+    def isZeroSized(self) -> bool:
+        return (self._buffer.size == 0)
+
+    def append(self, array: FloatArrayType) -> None:
+        self._buffer[self._pos, :, :] = array
+        self._pos += 1
+
+        if self._pos == self._buffer.shape[0]:
+            self._pos = 0
+            self._full = True
+
+    def getBuffer(self) -> FloatArrayType:
+        return self._buffer if self._full else self._buffer[:self._pos]
 
 class ObjectPatchCircularBuffer:
-    # This class remains largely unchanged, as it handles data buffering generically
-    # Implementation details here...
+    def __init__(self, extent: ImageExtent, channels: int, maxSize: int) -> None:
+        self._buffer: FloatArrayType = numpy.zeros(
+            (maxSize, channels, *extent.shape),
+            dtype=numpy.float32,
+        )
+        self._pos = 0
+        self._full = False
+
+    @classmethod
+    def createZeroSized(cls) -> ObjectPatchCircularBuffer:
+        return cls(ImageExtent(0, 0), 0, 0)
+
+    @property
+    def isZeroSized(self) -> bool:
+        return (self._buffer.size == 0)
+
+    def append(self, array: ObjectArrayType) -> None:
+        # Assuming the first channel is phase and the second (if present) is amplitude
+        self._buffer[self._pos, 0, :, :] = numpy.angle(array).astype(numpy.float32)
+
+        if self._buffer.shape[1] > 1:
+            self._buffer[self._pos, 1, :, :] = numpy.absolute(array).astype(numpy.float32)
+
+        self._pos += 1
+
+        if self._pos == self._buffer.shape[0]:
+            self._pos = 0
+            self._full = True
+
+    def getBuffer(self) -> FloatArrayType:
+        return self._buffer if self._full else self._buffer[:self._pos]
 
 class PtychoPinnTrainableReconstructor(TrainableReconstructor):
     # Constructor and properties need to be adapted for ptychopinn specifics
@@ -47,11 +100,13 @@ class PtychoPinnTrainableReconstructor(TrainableReconstructor):
         # return SomeModelClass(...)
 
     def reconstruct(self, parameters: ReconstructInput) -> ReconstructOutput:
-        # TODO: Implement reconstruction logic using ptychopinn
-        # This method will likely differ significantly from ptychonn's implementation
+        # Placeholder implementation. Specific ptychopinn reconstruction logic needed.
+        logger.info("Reconstruction using ptychopinn model not yet implemented.")
+        return ReconstructOutput.createNull()
 
     def ingestTrainingData(self, parameters: ReconstructInput) -> None:
-        # TODO: Implement training data ingestion logic specific to ptychopinn
+        # Placeholder implementation. Specific ptychopinn data ingestion logic needed.
+        logger.info("Ingesting training data for ptychopinn model not yet implemented.")
 
     def _plotMetrics(self, metrics: Mapping[str, Any]) -> Plot2D:
         # This method can likely remain unchanged, as it deals with plotting generic metrics
@@ -66,10 +121,13 @@ class PtychoPinnTrainableReconstructor(TrainableReconstructor):
         return self._fileFilterList[0]
 
     def saveTrainingData(self, filePath: Path) -> None:
-        # TODO: Implement saving of training data specific to ptychopinn
+        # Placeholder implementation. Specific ptychopinn data saving logic needed.
+        logger.info("Saving training data for ptychopinn model not yet implemented.")
 
     def train(self) -> Plot2D:
-        # TODO: Implement training logic using ptychopinn specifics
+        # Placeholder implementation. Specific ptychopinn training logic needed.
+        logger.info("Training using ptychopinn model not yet implemented.")
+        return Plot2D.createNull()
 
     def clearTrainingData(self) -> None:
         # This method can likely remain unchanged, as it deals with resetting buffers
