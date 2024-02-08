@@ -82,12 +82,11 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
     def __init__(self, modelSettings: Any, trainingSettings: Any) -> None:
         self.modelSettings = modelSettings
         self.trainingSettings = trainingSettings
-        # TODO: Initialize the PtychoPINN model with the provided settings
-        self.model = None  # Placeholder for the model instance
+        self.patternBuffer = PatternCircularBuffer.createZeroSized()
+        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
         self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
-        # TODO: Further initialization as needed
 
     @property
     def name(self) -> str:
@@ -98,10 +97,15 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         return ReconstructOutput.createNull()
 
     def ingestTrainingData(self, parameters: ReconstructInput) -> None:
-        # TODO: Implement the logic to ingest training data from the ReconstructInput
-        # This may involve preprocessing the data and storing it in a format suitable for training
-        self.trainingData.append(parameters)
-        # Note: This is a simplified representation. Actual implementation will depend on the data structure and model requirements.
+        if self.patternBuffer.isZeroSized:
+            self.patternBuffer = PatternCircularBuffer(parameters.diffractionPatternExtent, self.trainingSettings.maximumTrainingDatasetSize)
+        if self.objectPatchBuffer.isZeroSized:
+            channels = 2  # Assuming amplitude and phase channels for PtychoPINN
+            self.objectPatchBuffer = ObjectPatchCircularBuffer(parameters.objectExtent, channels, self.trainingSettings.maximumTrainingDatasetSize)
+        for pattern in parameters.diffractionPatternArray:
+            self.patternBuffer.append(pattern)
+        for objectPatch in parameters.objectArray:  # Assuming objectArray contains patches
+            self.objectPatchBuffer.append(objectPatch)
 
     def getSaveFileFilterList(self) -> Sequence[str]:
         return self.fileFilterList
@@ -124,4 +128,5 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
     def clearTrainingData(self) -> None:
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
         self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
-        # TODO: Add any additional cleanup required for the training data
+        self.patternBuffer = PatternCircularBuffer.createZeroSized()
+        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
