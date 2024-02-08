@@ -84,7 +84,8 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         self.trainingSettings = trainingSettings
         # TODO: Initialize the PtychoPINN model with the provided settings
         self.model = None  # Placeholder for the model instance
-        self.trainingData = []  # Placeholder for training data storage
+        self.patternBuffer = PatternCircularBuffer.createZeroSized()
+        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
         # TODO: Further initialization as needed
 
@@ -121,5 +122,6 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         # return Plot2D.createNull()  # Placeholder return statement
 
     def clearTrainingData(self) -> None:
-        self.trainingData.clear()
+        self.patternBuffer = PatternCircularBuffer.createZeroSized()
+        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         # TODO: Add any additional cleanup required for the training data
