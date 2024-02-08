@@ -114,16 +114,36 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         return self.fileFilterList[0]  # Default to the first option
 
     def saveTrainingData(self, filePath: Path) -> None:
-        # TODO: Implement the logic to save the ingested training data to the specified file path
-        # This may involve serialization and using the appropriate format based on the file extension
-        raise NotImplementedError("Saving training data is not yet implemented.")
+        logger.debug(f'Writing \"{filePath}\" as \"NPZ\"')
+        trainingData = {
+            'diffractionPatterns': self.patternBuffer.getBuffer(),
+            'objectPatches': self.objectPatchBuffer.getBuffer(),
+        }
+        numpy.savez(filePath, **trainingData)
 
     def train(self) -> Plot2D:
-        # TODO: Implement the training logic using the ingested training data
-        # This should include model training, validation, and possibly early stopping
-        # The method should return a Plot2D object representing the training progress, such as loss over epochs
-        raise NotImplementedError("Training is not yet implemented.")
-        # return Plot2D.createNull()  # Placeholder return statement
+        # Detailed TODO: Implement the model training logic specific to PtychoPINN
+        # This should include initializing the model, preparing the data, running the training loop,
+        # and validating the model. The specifics of these steps depend on the PtychoPINN architecture
+        # and training procedure, which are not detailed here.
+        #
+        # After training, generate a Plot2D object to visualize the training progress, such as loss over epochs.
+        # This visualization is crucial for understanding the training dynamics and evaluating the model's performance.
+        #
+        # Placeholder for training logic:
+        # Initialize model, prepare data, run training loop, validate model
+        #
+        # Placeholder for generating Plot2D object:
+        trainingLoss = [0]  # Replace with actual training loss values
+        validationLoss = [0]  # Replace with actual validation loss values
+        validationLossSeries = PlotSeries(label='Validation Loss', values=validationLoss)
+        trainingLossSeries = PlotSeries(label='Training Loss', values=trainingLoss)
+        seriesX = PlotSeries(label='Epoch', values=[*range(len(trainingLoss))])
+
+        return Plot2D(
+            axisX=PlotAxis(label='Epoch', series=[seriesX]),
+            axisY=PlotAxis(label='Loss', series=[trainingLossSeries, validationLossSeries]),
+        )
 
     def clearTrainingData(self) -> None:
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
