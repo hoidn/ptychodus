@@ -79,9 +79,14 @@ class ObjectPatchCircularBuffer:
         return self._buffer if self._full else self._buffer[:self._pos]
 class PtychoPINNTrainableReconstructor(TrainableReconstructor):
 
-    def __init__(self) -> None:
-        # Placeholder for actual initialization
-        pass
+    def __init__(self, modelSettings: Any, trainingSettings: Any) -> None:
+        self.modelSettings = modelSettings
+        self.trainingSettings = trainingSettings
+        # TODO: Initialize the PtychoPINN model with the provided settings
+        self.model = None  # Placeholder for the model instance
+        self.trainingData = []  # Placeholder for training data storage
+        self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
+        # TODO: Further initialization as needed
 
     @property
     def name(self) -> str:
@@ -92,25 +97,29 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         return ReconstructOutput.createNull()
 
     def ingestTrainingData(self, parameters: ReconstructInput) -> None:
-        # Placeholder for ingesting training data
-        pass
+        # TODO: Implement the logic to ingest training data from the ReconstructInput
+        # This may involve preprocessing the data and storing it in a format suitable for training
+        self.trainingData.append(parameters)
+        # Note: This is a simplified representation. Actual implementation will depend on the data structure and model requirements.
 
     def getSaveFileFilterList(self) -> Sequence[str]:
-        # Placeholder for file filter list
-        return []
+        return self.fileFilterList
 
     def getSaveFileFilter(self) -> str:
-        # Placeholder for a single file filter
-        return ''
+        return self.fileFilterList[0]  # Default to the first option
 
     def saveTrainingData(self, filePath: Path) -> None:
-        # Placeholder for saving training data
-        pass
+        # TODO: Implement the logic to save the ingested training data to the specified file path
+        # This may involve serialization and using the appropriate format based on the file extension
+        raise NotImplementedError("Saving training data is not yet implemented.")
 
     def train(self) -> Plot2D:
-        # Placeholder for the training process
-        return Plot2D.createNull()
+        # TODO: Implement the training logic using the ingested training data
+        # This should include model training, validation, and possibly early stopping
+        # The method should return a Plot2D object representing the training progress, such as loss over epochs
+        raise NotImplementedError("Training is not yet implemented.")
+        # return Plot2D.createNull()  # Placeholder return statement
 
     def clearTrainingData(self) -> None:
-        # Placeholder for clearing training data
-        pass
+        self.trainingData.clear()
+        # TODO: Add any additional cleanup required for the training data
