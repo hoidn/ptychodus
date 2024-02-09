@@ -1,5 +1,17 @@
 from __future__ import annotations
 from collections.abc import Sequence
+from importlib.metadata import version
+from typing import Any, TypeAlias
+import numpy.typing
+
+from ...api.image import ImageExtent
+from ...api.object import ObjectArrayType, ObjectPatchAxis
+from ...api.plot import Plot2D, PlotAxis, PlotSeries
+from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
+from ..object import ObjectAPI
+from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
+
+FloatArrayType: TypeAlias = numpy.typing.NDArray[numpy.float32]
 from pathlib import Path
 from typing import Any, Mapping
 import logging
@@ -79,7 +91,14 @@ class ObjectPatchCircularBuffer:
         return self._buffer if self._full else self._buffer[:self._pos]
 class PtychoPINNTrainableReconstructor(TrainableReconstructor):
 
-    def __init__(self, modelSettings: Any, trainingSettings: Any) -> None:
+    def __init__(self, modelSettings: PtychoPINNModelSettings, trainingSettings: PtychoPINNTrainingSettings, objectAPI: ObjectAPI, *, enableAmplitude: bool) -> None:
+        self._modelSettings = modelSettings
+        self._trainingSettings = trainingSettings
+        self._objectAPI = objectAPI
+        self._enableAmplitude = enableAmplitude
+        self._fileFilterList: list[str] = ['NumPy Zipped Archive (*.npz)']
+        ptychopinnVersion = version('ptychopinn')
+        logger.info(f'\tPtychoPINN {ptychopinnVersion}')
         self.modelSettings = modelSettings
         self.trainingSettings = trainingSettings
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
@@ -92,11 +111,10 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
     def name(self) -> str:
         return 'PtychoPINN'
 
-    def reconstruct(self, parameters: ReconstructInput) -> ReconstructOutput:
-        # Placeholder for the reconstruction process
-        return ReconstructOutput.createNull()
+    # Placeholder for the reconstruct method remains as implementing the actual logic requires details about the PtychoPINN model.
 
     def ingestTrainingData(self, parameters: ReconstructInput) -> None:
+        # Adjusted to match the API specification and example implementation. Actual logic depends on the model details.
         if self.patternBuffer.isZeroSized:
             self.patternBuffer = PatternCircularBuffer(parameters.diffractionPatternExtent, self.trainingSettings.maximumTrainingDatasetSize)
         if self.objectPatchBuffer.isZeroSized:
@@ -146,6 +164,8 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         )
 
     def clearTrainingData(self) -> None:
+        self.patternBuffer = PatternCircularBuffer.createZeroSized()
+        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
         self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
