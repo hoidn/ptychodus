@@ -3,6 +3,8 @@ Stores global variables for data generation and model configuration
 """
 # TODO naming convention for different types of parameters
 # TODO what default value and initialization for the probe scale?
+from ptychodus.api.settings import SettingsRegistry
+
 cfg = {
     # Shared settings with model/ptychopinn/settings.py
     'N': 64, 'offset': 4, 'gridsize': 2,

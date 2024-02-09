@@ -19,13 +19,13 @@ class Tester:
         # Placeholder for setting up test data
         pass
 
-    def predictTestData(self, npz_save_path: str = None) -> Any:
+    def predictTestData(self, npz_save_path: str = '') -> Any:
         # Placeholder for predicting test data
         raise NotImplementedError("Test data prediction is not yet implemented.")
 
 class Trainer:
     # Placeholder for the PtychoPINN training utility
-    def __init__(self, model: ReconSmallModel, batch_size: int, output_path: str = None, output_suffix: str = ''):
+    def __init__(self, model: ReconSmallModel, batch_size: int, output_path: str = '', output_suffix: str = ''):
         self.model = model
         self.batch_size = batch_size
         self.output_path = output_path
