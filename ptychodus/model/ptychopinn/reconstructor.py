@@ -174,10 +174,6 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         )
 
     def clearTrainingData(self) -> None:
-        ptychopinnVersion = version('ptychopinn')
-        logger.info(f'\tPtychoPINN {ptychopinnVersion}')
+        logger.debug('Clearing training data...')
         self._patternBuffer = PatternCircularBuffer.createZeroSized()
-        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
-        self._fileFilterList = ['NumPy Zipped Archive (*.npz)']
-        self.patternBuffer = PatternCircularBuffer.createZeroSized()
         self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
