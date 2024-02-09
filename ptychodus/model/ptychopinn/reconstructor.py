@@ -2,7 +2,8 @@ from __future__ import annotations
 from collections.abc import Sequence
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Mapping, TypeAlias
+from typing import Any, Mapping
+from typing_extensions import TypeAlias
 import logging
 from ..object import ObjectAPI
 from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
@@ -144,8 +145,8 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
     def saveTrainingData(self, filePath: Path) -> None:
         logger.debug(f'Writing \"{filePath}\" as \"NPZ\"')
         trainingData = {
-            'diffractionPatterns': self.patternBuffer.getBuffer(),
-            'objectPatches': self.objectPatchBuffer.getBuffer(),
+            'diffractionPatterns': self._patternBuffer.getBuffer(),
+            'objectPatches': self._objectPatchBuffer.getBuffer(),
         }
         numpy.savez(filePath, **trainingData)
 
