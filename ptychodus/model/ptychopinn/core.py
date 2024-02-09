@@ -225,10 +225,10 @@ class PtychoPINNTrainingPresenter(Observable, Observer):
 
     def getEpochs(self) -> int:
         limits = self.getEpochsLimits()
-        return limits.clamp(self._settings.epochs.value)
+        return limits.clamp(self._settings.trainingEpochs.value)
 
     def setEpochs(self, value: int) -> None:
-        self._settings.epochs.value = value
+        self._settings.trainingEpochs.value = value
 
     @classmethod
     def createInstance(cls, settings: PtychoPINNTrainingSettings) -> PtychoPINNTrainingPresenter:
@@ -262,14 +262,6 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary):
         ptychoPINNReconstructor: TrainableReconstructor = NullReconstructor('PtychoPINN')
         reconstructors: list[TrainableReconstructor] = [ptychoPINNReconstructor]
         return cls(modelSettings, trainingSettings, reconstructors)
-
-    @property
-    def name(self) -> str:
-        return 'PtychoPINN'
-
-    def __iter__(self) -> Iterator[Reconstructor]:
-        return iter(self._reconstructors)
-
 
     @property
     def name(self) -> str:
