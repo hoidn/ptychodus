@@ -1,8 +1,20 @@
 from __future__ import annotations
 from collections.abc import Sequence
 from importlib.metadata import version
-from typing import Any, TypeAlias
+from importlib.metadata import version
+from pathlib import Path
+from typing import Any, Mapping, TypeAlias
+import logging
+import numpy
 import numpy.typing
+from ...api.image import ImageExtent
+from ...api.object import ObjectArrayType, ObjectPatchAxis
+from ...api.plot import Plot2D, PlotAxis, PlotSeries
+from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
+from ..object import ObjectAPI
+from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
+FloatArrayType: TypeAlias = numpy.typing.NDArray[numpy.float32]
+logger = logging.getLogger(__name__)
 
 from ...api.image import ImageExtent
 from ...api.object import ObjectArrayType, ObjectPatchAxis
@@ -101,10 +113,8 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         logger.info(f'\tPtychoPINN {ptychopinnVersion}')
         self.modelSettings = modelSettings
         self.trainingSettings = trainingSettings
-        self.patternBuffer = PatternCircularBuffer.createZeroSized()
-        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
-        self.patternBuffer = PatternCircularBuffer.createZeroSized()
-        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
+        self._patternBuffer = PatternCircularBuffer.createZeroSized()
+        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
 
     @property
@@ -164,9 +174,7 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         )
 
     def clearTrainingData(self) -> None:
-        self.patternBuffer = PatternCircularBuffer.createZeroSized()
-        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
-        self.patternBuffer = PatternCircularBuffer.createZeroSized()
-        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
+        self._patternBuffer = PatternCircularBuffer.createZeroSized()
+        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
         self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
