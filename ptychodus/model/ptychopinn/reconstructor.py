@@ -1,7 +1,7 @@
 from __future__ import annotations
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Mapping, TypeAlias
+from typing import Any, Mapping
 import logging
 
 import numpy
@@ -12,7 +12,7 @@ from ...api.object import ObjectArrayType, ObjectPatchAxis
 from ...api.plot import Plot2D, PlotAxis, PlotSeries
 from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
 
-FloatArrayType: TypeAlias = numpy.typing.NDArray[numpy.float32]
+FloatArrayType = numpy.typing.NDArray[numpy.float32]
 
 logger = logging.getLogger(__name__)
 
