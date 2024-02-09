@@ -284,7 +284,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary):
         ptychoPINNReconstructor: TrainableReconstructor = NullReconstructor('PtychoPINN')
         return cls(modelSettings, trainingSettings, [ptychoPINNReconstructor])
 
-        return cls(modelSettings, trainingSettings, cls_reconstructors)
+        return cls(modelSettings, trainingSettings, [ptychoPINNReconstructor])
 
     @property
     def name(self) -> str:
