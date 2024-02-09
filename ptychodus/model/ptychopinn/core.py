@@ -282,7 +282,7 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary):
         trainingSettings = PtychoPINNTrainingSettings.createInstance(settingsRegistry)
         cls._reconstructors: list[TrainableReconstructor] = []
         ptychoPINNReconstructor: TrainableReconstructor = NullReconstructor('PtychoPINN')
-        cls._reconstructors = [ptychoPINNReconstructor]
+        return cls(modelSettings, trainingSettings, [ptychoPINNReconstructor])
 
         return cls(modelSettings, trainingSettings, cls_reconstructors)
 
