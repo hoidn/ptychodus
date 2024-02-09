@@ -1,15 +1,9 @@
 from __future__ import annotations
-from __future__ import annotations
 from collections.abc import Sequence
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Mapping, TypeAlias
 import logging
-import numpy
-import numpy.typing
-from ...api.object import ObjectArrayType, ObjectPatchAxis
-from ...api.plot import Plot2D, PlotAxis, PlotSeries
-from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
 from ..object import ObjectAPI
 from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
 FloatArrayType: TypeAlias = numpy.typing.NDArray[numpy.float32]
@@ -112,26 +106,34 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         ptychopinnVersion = version('ptychopinn')
         logger.info(f'\tPtychoPINN {ptychopinnVersion}')
         self._patternBuffer = PatternCircularBuffer.createZeroSized()
-        self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
+        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
+        self._fileFilterList = ['NumPy Zipped Archive (*.npz)']
         self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
 
     @property
     def name(self) -> str:
-        return 'PtychoPINN'
+        return 'AmplitudePhase' if self._enableAmplitude else 'PhaseOnly'
 
     # Placeholder for the reconstruct method remains as implementing the actual logic requires details about the PtychoPINN model.
 
     def ingestTrainingData(self, parameters: ReconstructInput) -> None:
         # Adjusted to match the API specification and example implementation. Actual logic depends on the model details.
-        if self.patternBuffer.isZeroSized:
-            self.patternBuffer = PatternCircularBuffer(parameters.diffractionPatternExtent, self.trainingSettings.maximumTrainingDatasetSize)
-        if self.objectPatchBuffer.isZeroSized:
-            channels = 2  # Assuming amplitude and phase channels for PtychoPINN
-            self.objectPatchBuffer = ObjectPatchCircularBuffer(parameters.objectExtent, channels, self.trainingSettings.maximumTrainingDatasetSize)
-        for pattern in parameters.diffractionPatternArray:
-            self.patternBuffer.append(pattern)
-        for objectPatch in parameters.objectArray:  # Assuming objectArray contains patches
-            self.objectPatchBuffer.append(objectPatch)
+        objectInterpolator = parameters.objectInterpolator
+
+        if self._patternBuffer.isZeroSized:
+            diffractionPatternExtent = parameters.diffractionPatternExtent
+            maximumSize = max(1, self._trainingSettings.maximumTrainingDatasetSize.value)
+
+            channels = 2 if self._enableAmplitude else 1
+            self._patternBuffer = PatternCircularBuffer(diffractionPatternExtent, maximumSize)
+            self._objectPatchBuffer = ObjectPatchCircularBuffer(diffractionPatternExtent, channels, maximumSize)
+
+        for scanIndex, scanPoint in parameters.scan.items():
+            objectPatch = objectInterpolator.getPatch(scanPoint, parameters.probeExtent)
+            self._objectPatchBuffer.append(objectPatch.array)
+
+        for pattern in parameters.diffractionPatternArray.astype(numpy.float32):
+            self._patternBuffer.append(pattern)
 
     def getSaveFileFilterList(self) -> Sequence[str]:
         return self.fileFilterList
@@ -175,6 +177,7 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         ptychopinnVersion = version('ptychopinn')
         logger.info(f'\tPtychoPINN {ptychopinnVersion}')
         self._patternBuffer = PatternCircularBuffer.createZeroSized()
-        self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
+        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
+        self._fileFilterList = ['NumPy Zipped Archive (*.npz)']
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
         self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
