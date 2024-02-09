@@ -1,13 +1,12 @@
 from __future__ import annotations
+from __future__ import annotations
 from collections.abc import Sequence
-from importlib.metadata import version
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Mapping, TypeAlias
 import logging
 import numpy
 import numpy.typing
-from ...api.image import ImageExtent
 from ...api.object import ObjectArrayType, ObjectPatchAxis
 from ...api.plot import Plot2D, PlotAxis, PlotSeries
 from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
@@ -24,10 +23,6 @@ from ..object import ObjectAPI
 from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
 
 FloatArrayType: TypeAlias = numpy.typing.NDArray[numpy.float32]
-from pathlib import Path
-from typing import Any, Mapping
-import logging
-
 import numpy
 import numpy.typing
 
@@ -36,7 +31,7 @@ from ...api.object import ObjectArrayType, ObjectPatchAxis
 from ...api.plot import Plot2D, PlotAxis, PlotSeries
 from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
 
-FloatArrayType = numpy.typing.NDArray[numpy.float32]
+logger = logging.getLogger(__name__)
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +100,7 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
 
     def __init__(self, modelSettings: PtychoPINNModelSettings, trainingSettings: PtychoPINNTrainingSettings, objectAPI: ObjectAPI, *, enableAmplitude: bool) -> None:
         self._modelSettings = modelSettings
+        self._modelSettings = modelSettings
         self._trainingSettings = trainingSettings
         self._objectAPI = objectAPI
         self._enableAmplitude = enableAmplitude
@@ -113,8 +109,10 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         logger.info(f'\tPtychoPINN {ptychopinnVersion}')
         self.modelSettings = modelSettings
         self.trainingSettings = trainingSettings
+        ptychopinnVersion = version('ptychopinn')
+        logger.info(f'\tPtychoPINN {ptychopinnVersion}')
         self._patternBuffer = PatternCircularBuffer.createZeroSized()
-        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
+        self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
         self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
 
     @property
@@ -174,7 +172,9 @@ class PtychoPINNTrainableReconstructor(TrainableReconstructor):
         )
 
     def clearTrainingData(self) -> None:
+        ptychopinnVersion = version('ptychopinn')
+        logger.info(f'\tPtychoPINN {ptychopinnVersion}')
         self._patternBuffer = PatternCircularBuffer.createZeroSized()
-        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
+        self.fileFilterList = ['NumPy Arrays (*.npy)', 'NumPy Zipped Archive (*.npz)']
         self.patternBuffer = PatternCircularBuffer.createZeroSized()
-        self.objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
+        self._objectPatchBuffer = ObjectPatchCircularBuffer.createZeroSized()
