@@ -1,32 +1,11 @@
 from __future__ import annotations
 from collections.abc import Sequence
-from importlib.metadata import version
-from pathlib import Path
-from typing import Any, Mapping
-from typing_extensions import TypeAlias
-import logging
-from ..object import ObjectAPI
-from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
-FloatArrayType: TypeAlias = numpy.typing.NDArray[numpy.float32]
-logger = logging.getLogger(__name__)
-
 from ...api.image import ImageExtent
 from ...api.object import ObjectArrayType, ObjectPatchAxis
 from ...api.plot import Plot2D, PlotAxis, PlotSeries
 from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
-from ..object import ObjectAPI
-from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
-
-FloatArrayType: TypeAlias = numpy.typing.NDArray[numpy.float32]
 import numpy
 import numpy.typing
-
-from ...api.image import ImageExtent
-from ...api.object import ObjectArrayType, ObjectPatchAxis
-from ...api.plot import Plot2D, PlotAxis, PlotSeries
-from ...api.reconstructor import ReconstructInput, ReconstructOutput, TrainableReconstructor
-
-logger = logging.getLogger(__name__)
 
 logger = logging.getLogger(__name__)
 
