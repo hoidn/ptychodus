@@ -15,18 +15,6 @@ from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
 logger = logging.getLogger(__name__)
 
 
-from ...api.observer import Observable, Observer
-from ...api.settings import SettingsRegistry
-from ...api.reconstructor import (NullReconstructor, Reconstructor, ReconstructorLibrary,
-                                  TrainableReconstructor)
-from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
-import logging
-from decimal import Decimal
-from typing import Final
-from collections.abc import Sequence
-from pathlib import Path
-
-logger = logging.getLogger(__name__)
 
 class PtychoPINNModelPresenter(Observable, Observer):
     MAX_INT: Final[int] = 0x7FFFFFFF
@@ -180,37 +168,6 @@ class PtychoPINNModelPresenter(Observable, Observer):
     def setAmpActivation(self, amp_activation: str) -> None:
         self._settings.amp_activation.value = amp_activation
 
-    MAX_INT: Final[int] = 0x7FFFFFFF
-
-    def __init__(self, settings: PtychoPINNModelSettings) -> None:
-        super().__init__()
-        self._settings = settings
-
-    def getLearningRate(self) -> Decimal:
-        return self._settings.learningRate.value
-
-    def setLearningRate(self, value: Decimal) -> None:
-        self._settings.learningRate.value = value
-
-    def getN(self) -> int:
-        return self._settings.N.value
-
-    def setN(self, value: int) -> None:
-        self._settings.N.value = value
-
-    # Similar methods for other settings...
-
-    @classmethod
-    def createInstance(cls, settings: PtychoPINNModelSettings) -> PtychoPINNModelPresenter:
-        presenter = cls(settings)
-        settings.addObserver(presenter)
-        return presenter
-
-    # Define methods to interact with model settings, similar to PtychoNNModelPresenter
-
-    def update(self, observable: Observable) -> None:
-        if observable is self._settings:
-            self.notifyObservers()
 
 
 class PtychoPINNTrainingPresenter(Observable, Observer):
@@ -262,40 +219,6 @@ class PtychoPINNTrainingPresenter(Observable, Observer):
 
     def getRealspaceWeightLimits(self) -> Interval[Decimal]:
         return Interval[Decimal](Decimal('0'), Decimal('1'))
-    def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
-        super().__init__()
-        self._settings = settings
-
-    def getMAEWeight(self) -> Decimal:
-        return self._settings.mae_weight.value
-
-    def setMAEWeight(self, value: Decimal) -> None:
-        self._settings.mae_weight.value = value
-
-    def getNLLWeight(self) -> Decimal:
-        return self._settings.nll_weight.value
-
-    def setNLLWeight(self, value: Decimal) -> None:
-        self._settings.nll_weight.value = value
-
-    def getTVWeight(self) -> Decimal:
-        return self._settings.tv_weight.value
-
-    def setTVWeight(self, value: Decimal) -> None:
-        self._settings.tv_weight.value = value
-
-    def getRealspaceMAEWeight(self) -> Decimal:
-        return self._settings.realspace_mae_weight.value
-
-    def setRealspaceMAEWeight(self, value: Decimal) -> None:
-        self._settings.realspace_mae_weight.value = value
-
-    def getRealspaceWeight(self) -> Decimal:
-        return self._settings.realspace_weight.value
-
-    def setRealspaceWeight(self, value: Decimal) -> None:
-        self._settings.realspace_weight.value = value
-    MAX_INT: Final[int] = 0x7FFFFFFF
 
     def getEpochsLimits(self) -> Interval[int]:
         return Interval[int](1, self.MAX_INT)
@@ -347,15 +270,6 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary):
     def __iter__(self) -> Iterator[Reconstructor]:
         return iter(self._reconstructors)
 
-    @classmethod
-    def createInstance(cls, settingsRegistry: SettingsRegistry) -> PtychoPINNReconstructorLibrary:
-        modelSettings = PtychoPINNModelSettings.createInstance(settingsRegistry)
-        trainingSettings = PtychoPINNTrainingSettings.createInstance(settingsRegistry)
-        cls._reconstructors: list[TrainableReconstructor] = []
-        ptychoPINNReconstructor: TrainableReconstructor = NullReconstructor('PtychoPINN')
-        return cls(modelSettings, trainingSettings, [ptychoPINNReconstructor])
-
-        return cls(modelSettings, trainingSettings, [ptychoPINNReconstructor])
 
     @property
     def name(self) -> str:
