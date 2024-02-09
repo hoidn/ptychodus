@@ -280,11 +280,11 @@ class PtychoPINNReconstructorLibrary(ReconstructorLibrary):
     def createInstance(cls, settingsRegistry: SettingsRegistry) -> PtychoPINNReconstructorLibrary:
         modelSettings = PtychoPINNModelSettings.createInstance(settingsRegistry)
         trainingSettings = PtychoPINNTrainingSettings.createInstance(settingsRegistry)
-        reconstructors: list[TrainableReconstructor] = []
+        cls_reconstructors: list[TrainableReconstructor] = []
         ptychoPINNReconstructor: TrainableReconstructor = NullReconstructor('PtychoPINN')
-        self._reconstructors: list[TrainableReconstructor] = [ptychoPINNReconstructor]
+        cls_reconstructors: list[TrainableReconstructor] = [ptychoPINNReconstructor]
 
-        return cls(modelSettings, trainingSettings, reconstructors)
+        return cls(modelSettings, trainingSettings, cls_reconstructors)
 
     @property
     def name(self) -> str:
