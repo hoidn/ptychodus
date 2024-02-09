@@ -15,7 +15,37 @@ from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
 logger = logging.getLogger(__name__)
 
 
+from ...api.observer import Observable, Observer
+from ...api.settings import SettingsRegistry
+from ...api.reconstructor import (NullReconstructor, Reconstructor, ReconstructorLibrary,
+                                  TrainableReconstructor)
+from .settings import PtychoPINNModelSettings, PtychoPINNTrainingSettings
+import logging
+from decimal import Decimal
+from typing import Final
+from collections.abc import Sequence
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
 class PtychoPINNModelPresenter(Observable, Observer):
+    MAX_INT: Final[int] = 0x7FFFFFFF
+
+    def __init__(self, settings: PtychoPINNModelSettings) -> None:
+        super().__init__()
+        self._settings = settings
+        self._fileFilterList: list[str] = ['PyTorch Model State Files (*.pt *.pth)']
+
+    @classmethod
+    def createInstance(cls, settings: PtychoPINNModelSettings) -> PtychoPINNModelPresenter:
+        presenter = cls(settings)
+        settings.addObserver(presenter)
+        return presenter
+
+    def update(self, observable: Observable) -> None:
+        if observable is self._settings:
+            self.notifyObservers()
+
     _fileFilterList: list[str] = ['PyTorch Model State Files (*.pt *.pth)']
 
     def getStateFileFilterList(self) -> Sequence[str]:
@@ -184,6 +214,22 @@ class PtychoPINNModelPresenter(Observable, Observer):
 
 
 class PtychoPINNTrainingPresenter(Observable, Observer):
+    MAX_INT: Final[int] = 0x7FFFFFFF
+
+    def __init__(self, settings: PtychoPINNTrainingSettings) -> None:
+        super().__init__()
+        self._settings = settings
+
+    @classmethod
+    def createInstance(cls, settings: PtychoPINNTrainingSettings) -> PtychoPINNTrainingPresenter:
+        presenter = cls(settings)
+        settings.addObserver(presenter)
+        return presenter
+
+    def update(self, observable: Observable) -> None:
+        if observable is self._settings:
+            self.notifyObservers()
+
     def getOutputPath(self) -> Path:
         return self._settings.outputPath.value
 
@@ -275,6 +321,31 @@ class PtychoPINNTrainingPresenter(Observable, Observer):
 
 
 class PtychoPINNReconstructorLibrary(ReconstructorLibrary):
+
+    def __init__(self, modelSettings: PtychoPINNModelSettings,
+                 trainingSettings: PtychoPINNTrainingSettings,
+                 reconstructors: Sequence[Reconstructor]) -> None:
+        super().__init__()
+        self._modelSettings = modelSettings
+        self._trainingSettings = trainingSettings
+        self.modelPresenter = PtychoPINNModelPresenter.createInstance(modelSettings)
+        self.trainingPresenter = PtychoPINNTrainingPresenter.createInstance(trainingSettings)
+        self._reconstructors = reconstructors
+
+    @classmethod
+    def createInstance(cls, settingsRegistry: SettingsRegistry) -> PtychoPINNReconstructorLibrary:
+        modelSettings = PtychoPINNModelSettings.createInstance(settingsRegistry)
+        trainingSettings = PtychoPINNTrainingSettings.createInstance(settingsRegistry)
+        ptychoPINNReconstructor: TrainableReconstructor = NullReconstructor('PtychoPINN')
+        reconstructors: list[TrainableReconstructor] = [ptychoPINNReconstructor]
+        return cls(modelSettings, trainingSettings, reconstructors)
+
+    @property
+    def name(self) -> str:
+        return 'PtychoPINN'
+
+    def __iter__(self) -> Iterator[Reconstructor]:
+        return iter(self._reconstructors)
 
     @classmethod
     def createInstance(cls, settingsRegistry: SettingsRegistry) -> PtychoPINNReconstructorLibrary:
