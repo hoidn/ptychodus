@@ -42,11 +42,6 @@ class PtychoPINNModelPresenter(Observable, Observer):
     def getStateFileFilter(self) -> str:
         return self._fileFilterList[0]
 
-    def getStateFilePath(self) -> Path:
-        return self._settings.stateFilePath.value
-
-    def setStateFilePath(self, directory: Path) -> None:
-        self._settings.stateFilePath.value = directory
 
     def getGridsizeLimits(self) -> Interval[int]:
         return Interval[int](1, self.MAX_INT)
@@ -177,15 +172,6 @@ class PtychoPINNTrainingPresenter(Observable, Observer):
         super().__init__()
         self._settings = settings
 
-    @classmethod
-    def createInstance(cls, settings: PtychoPINNTrainingSettings) -> PtychoPINNTrainingPresenter:
-        presenter = cls(settings)
-        settings.addObserver(presenter)
-        return presenter
-
-    def update(self, observable: Observable) -> None:
-        if observable is self._settings:
-            self.notifyObservers()
 
     def getOutputPath(self) -> Path:
         return self._settings.outputPath.value
